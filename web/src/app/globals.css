@@ -1,0 +1,441 @@
+@import "tailwindcss";
+
+/*
+ * Green Energy RO design tokens.
+ * Source of truth for colours. JS mirrors live in src/lib/theme.ts — keep them in sync.
+ * Chart series colours were validated (dataviz validator: lightness band, chroma,
+ * CVD separation all-pairs for solar/wind/price, contrast >= 3:1) on --surface.
+ *
+ * Theme resolution: <html data-theme="light|dark"> wins; with no attribute the
+ * OS preference (prefers-color-scheme) applies.
+ */
+
+/* Class-based dark variant so `dark:` utilities follow the toggle too. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --surface-3: #e2e7ee;
+  --overlay: rgba(15, 23, 42, 0.55);
+
+  /* Text (all >= 4.5:1 on --surface and --bg) */
+  --fg: #0f172a;
+  --fg-muted: #334155;
+  --fg-subtle: #526075;
+
+  /* Borders */
+  --border: #d5dbe4;
+  --border-strong: #9aa6b6;
+  --ring: #0b6e3f;
+
+  /* Brand accent (UI only, never a data series) */
+  --accent: #0b6e3f;
+  --accent-hover: #095a33;
+  --accent-fg: #ffffff;
+  --accent-soft: #dff3e8;
+  --accent-ink: #0a5c35;
+
+  /* Energy series (charts + map) */
+  --solar: #c77700;
+  --solar-ink: #8a5200;
+  --solar-soft: #fdf0d9;
+  --solar-band: rgba(199, 119, 0, 0.2);
+  --wind: #00879e;
+  --wind-ink: #006577;
+  --wind-soft: #dcf2f6;
+  --wind-band: rgba(0, 135, 158, 0.2);
+  --price: #7048c8;
+  --price-ink: #5a34b0;
+  --price-soft: #ece6fa;
+  --load: #475569;
+  --actual: #0f172a;
+  --baseline: #6b7789;
+  --grid-line: #e3e7ee;
+  --axis: #9aa6b6;
+
+  /* Diverging pair: feature pushes forecast up (positive) / down (negative) */
+  --positive: #2166ac;
+  --positive-soft: #dbe8f6;
+  --positive-ink: #1a5590;
+  --negative: #c2304f;
+  --negative-soft: #f8dfe5;
+  --negative-ink: #a3243f;
+  --neutral-mid: #e5e7eb;
+
+  /* Status (reserved: always paired with icon + label) */
+  --good: #0f7b0f;
+  --good-soft: #dcf3dc;
+  --warn: #9a6200;
+  --warn-soft: #fdf1d6;
+  --bad: #c0282d;
+  --bad-soft: #fbe0e0;
+  --info: #1d5fa8;
+  --info-soft: #dde9f7;
+
+  /* Provenance */
+  --synthetic: #8a4b00;
+  --synthetic-soft: #fff1dc;
+  --synthetic-border: #e4b36b;
+  --real: #0b6e3f;
+  --real-soft: #dff3e8;
+  --real-border: #79c29b;
+
+  /* Map */
+  --map-land: #f1f3f0;
+  --map-water: #cfe3f1;
+  --map-border: #6b7789;
+  --map-region-line: #8794a6;
+  --map-line-400: #b3361f;
+  --map-line-220: #d9822b;
+  --map-substation: #1f2937;
+  --map-nuclear: #7048c8;
+  --map-hydro: #2166ac;
+  --map-label: #1f2937;
+  --map-label-halo: #ffffff;
+
+  --elev-card: 0 1px 2px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(15, 23, 42, 0.05);
+  --radius: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0b0f14;
+    --surface: #141a22;
+    --surface-2: #1b232e;
+    --surface-3: #253041;
+    --overlay: rgba(0, 0, 0, 0.6);
+    --fg: #f1f5f9;
+    --fg-muted: #c8d0db;
+    --fg-subtle: #9aa6b8;
+    --border: #2a3544;
+    --border-strong: #4a586c;
+    --ring: #3ecf8e;
+    --accent: #3ecf8e;
+    --accent-hover: #5fdaa2;
+    --accent-fg: #04241a;
+    --accent-soft: #10322a;
+    --accent-ink: #6ee0aa;
+    --solar: #c08410;
+    --solar-ink: #f0b54a;
+    --solar-soft: #33260f;
+    --solar-band: rgba(240, 181, 74, 0.22);
+    --wind: #1ea5b8;
+    --wind-ink: #5cc9d8;
+    --wind-soft: #0f2f36;
+    --wind-band: rgba(30, 165, 184, 0.24);
+    --price: #9a7cf0;
+    --price-ink: #b9a3f6;
+    --price-soft: #2a2245;
+    --load: #a7b2c2;
+    --actual: #f1f5f9;
+    --baseline: #8d99ab;
+    --grid-line: #232d3a;
+    --axis: #4a586c;
+    --positive: #4a90d9;
+    --positive-soft: #172b44;
+    --positive-ink: #7fb3ea;
+    --negative: #e0587a;
+    --negative-soft: #3d1a25;
+    --negative-ink: #f08aa3;
+    --neutral-mid: #374151;
+    --good: #3cc13c;
+    --good-soft: #12301a;
+    --warn: #f4b63f;
+    --warn-soft: #3a2c0f;
+    --bad: #f07077;
+    --bad-soft: #3d1a1d;
+    --info: #6aa8ec;
+    --info-soft: #162a42;
+    --synthetic: #f5bd6b;
+    --synthetic-soft: #33240e;
+    --synthetic-border: #7a5524;
+    --real: #6ee0aa;
+    --real-soft: #10322a;
+    --real-border: #2b7a55;
+    --map-land: #1a212b;
+    --map-water: #0e2233;
+    --map-border: #8d99ab;
+    --map-region-line: #4a586c;
+    --map-line-400: #ef6a4c;
+    --map-line-220: #e9a255;
+    --map-substation: #e5e7eb;
+    --map-nuclear: #9a7cf0;
+    --map-hydro: #4a90d9;
+    --map-label: #e5e7eb;
+    --map-label-halo: #0b0f14;
+    --elev-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 0, 0, 0.25);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b0f14;
+  --surface: #141a22;
+  --surface-2: #1b232e;
+  --surface-3: #253041;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --fg: #f1f5f9;
+  --fg-muted: #c8d0db;
+  --fg-subtle: #9aa6b8;
+  --border: #2a3544;
+  --border-strong: #4a586c;
+  --ring: #3ecf8e;
+  --accent: #3ecf8e;
+  --accent-hover: #5fdaa2;
+  --accent-fg: #04241a;
+  --accent-soft: #10322a;
+  --accent-ink: #6ee0aa;
+  --solar: #c08410;
+  --solar-ink: #f0b54a;
+  --solar-soft: #33260f;
+  --solar-band: rgba(240, 181, 74, 0.22);
+  --wind: #1ea5b8;
+  --wind-ink: #5cc9d8;
+  --wind-soft: #0f2f36;
+  --wind-band: rgba(30, 165, 184, 0.24);
+  --price: #9a7cf0;
+  --price-ink: #b9a3f6;
+  --price-soft: #2a2245;
+  --load: #a7b2c2;
+  --actual: #f1f5f9;
+  --baseline: #8d99ab;
+  --grid-line: #232d3a;
+  --axis: #4a586c;
+  --positive: #4a90d9;
+  --positive-soft: #172b44;
+  --positive-ink: #7fb3ea;
+  --negative: #e0587a;
+  --negative-soft: #3d1a25;
+  --negative-ink: #f08aa3;
+  --neutral-mid: #374151;
+  --good: #3cc13c;
+  --good-soft: #12301a;
+  --warn: #f4b63f;
+  --warn-soft: #3a2c0f;
+  --bad: #f07077;
+  --bad-soft: #3d1a1d;
+  --info: #6aa8ec;
+  --info-soft: #162a42;
+  --synthetic: #f5bd6b;
+  --synthetic-soft: #33240e;
+  --synthetic-border: #7a5524;
+  --real: #6ee0aa;
+  --real-soft: #10322a;
+  --real-border: #2b7a55;
+  --map-land: #1a212b;
+  --map-water: #0e2233;
+  --map-border: #8d99ab;
+  --map-region-line: #4a586c;
+  --map-line-400: #ef6a4c;
+  --map-line-220: #e9a255;
+  --map-substation: #e5e7eb;
+  --map-nuclear: #9a7cf0;
+  --map-hydro: #4a90d9;
+  --map-label: #e5e7eb;
+  --map-label-halo: #0b0f14;
+  --elev-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Tailwind v4 utilities: bg-surface, text-fg-muted, border-border, bg-solar, text-wind-ink ... */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-overlay: var(--overlay);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-solar: var(--solar);
+  --color-solar-ink: var(--solar-ink);
+  --color-solar-soft: var(--solar-soft);
+  --color-solar-band: var(--solar-band);
+  --color-wind: var(--wind);
+  --color-wind-ink: var(--wind-ink);
+  --color-wind-soft: var(--wind-soft);
+  --color-wind-band: var(--wind-band);
+  --color-price: var(--price);
+  --color-price-ink: var(--price-ink);
+  --color-price-soft: var(--price-soft);
+  --color-load: var(--load);
+  --color-actual: var(--actual);
+  --color-baseline: var(--baseline);
+  --color-grid-line: var(--grid-line);
+  --color-axis: var(--axis);
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+  --color-positive-ink: var(--positive-ink);
+  --color-negative: var(--negative);
+  --color-negative-soft: var(--negative-soft);
+  --color-negative-ink: var(--negative-ink);
+  --color-neutral-mid: var(--neutral-mid);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-synthetic: var(--synthetic);
+  --color-synthetic-soft: var(--synthetic-soft);
+  --color-synthetic-border: var(--synthetic-border);
+  --color-real: var(--real);
+  --color-real-soft: var(--real-soft);
+  --color-real-border: var(--real-border);
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+
+  --radius-card: var(--radius);
+  --shadow-card: var(--elev-card);
+}
+
+/* Projector-friendly base size: 16px on phones, 17px tablets, 18px desktop. */
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 106.25%;
+  }
+}
+@media (min-width: 1280px) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessible range input used by components/ui/Slider */
+.ge-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2.25rem;
+  background: transparent;
+  cursor: pointer;
+  --fill: 50%;
+  --track-fill: var(--accent);
+}
+.ge-range::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--track-fill) var(--fill), var(--surface-3) var(--fill));
+}
+.ge-range::-moz-range-track {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-3);
+}
+.ge-range::-moz-range-progress {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--track-fill);
+}
+.ge-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 3px solid var(--track-fill);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.ge-range::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 3px solid var(--track-fill);
+}
+.ge-range:focus-visible {
+  outline: none;
+}
+.ge-range:focus-visible::-webkit-slider-thumb {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.ge-range:focus-visible::-moz-range-thumb {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Recharts: inherit tokens */
+.recharts-text,
+.recharts-cartesian-axis-tick-value {
+  fill: var(--fg-subtle);
+}
+.recharts-legend-item-text {
+  color: var(--fg-muted) !important;
+}
+.recharts-surface:focus,
+.recharts-wrapper:focus,
+.recharts-sector:focus {
+  outline: none;
+}
+
+/* MapLibre popups follow the theme */
+.maplibregl-popup-content {
+  background: var(--surface) !important;
+  color: var(--fg) !important;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem !important;
+  box-shadow: var(--elev-card) !important;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+.maplibregl-popup-tip {
+  border-top-color: var(--surface) !important;
+  border-bottom-color: var(--surface) !important;
+}
+.maplibregl-ctrl-attrib {
+  background: color-mix(in srgb, var(--surface) 85%, transparent) !important;
+  color: var(--fg-muted) !important;
+}
+.maplibregl-ctrl-attrib a {
+  color: var(--fg-muted) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
